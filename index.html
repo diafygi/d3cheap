@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>d3 on cheap smarphones</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <style>
+            /*http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain)*/
+            html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small,
+            strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas,
+            details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {margin:0; padding:0; border:0; font-size:100%; font:inherit; vertical-align:baseline;}
+            /* HTML5 display-role reset for older browsers */
+            article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {display:block;} body {line-height: 1;} ol, ul {list-style: none;}
+            blockquote, q {quotes: none;} blockquote:before, blockquote:after, q:before, q:after {content:''; content:none;} table {border-collapse:collapse; border-spacing:0;}
+        </style>
+        <script src="d3.min.js" charset="utf-8"></script>
+        <script src="zepto.min.js" charset="utf-8"></script>
+        <style>
+            body{
+                font-family:"sans-serif";
+            }
+            #nextprev{
+                margin:10px 0px 20px 10px;
+            }
+            #next, #prev{
+                display:inline-block;
+                text-decoration:none;
+                font-weight:bold;
+                padding:10px;
+                margin-right:10px;
+                background-color:#0000FF;
+                color:#EEEEEE;
+                border-radius:5px;
+            }
+            #title{
+                display:inline-block;
+                text-overflow:ellipsis;
+                font-style:italic;
+                font-size:20px;
+            }
+            #wrapper{
+                text-align:center;
+            }
+            #slide{
+                text-align:left;
+                display:inline-block;
+            }
+            textarea{
+                display:none;
+            }
+            h1{
+                text-align:center;
+                font-size:30px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="nextprev">
+            <a id="prev" href="#">Prev</a>
+            <a id="next" href="#">Next</a>
+            <div id="title"></div>
+        </div>
+        <div id="wrapper">
+            <div id="slide"></div>
+        </div>
+        <!--Using text areas for raw slide html storage so they don't preload-->
+        <!--(I want to show real load times when tapping next)-->
+        <!--Also, my syntax highlight still works within textareas-->
+        <!--(makes coding easier than typing html into javascript variables)-->
+        <textarea id="2" data-title="intro">
+            <h1>d3 on cheap smarphones</h1>
+        </textarea>
+        <textarea id="3" data-title="support">
+            <div id="svg-wrapper">
+                <!--manual svg made in inkscape-->
+                <svg width="114" height="125">
+                    <g transform="translate(0,-927.3622)">
+                        <path d="m 68.292685,46.484936 a 26.685797,26.685797 0 1 1 -53.371594,0 26.685797,26.685797 0 1 1 53.371594,0 z" transform="translate(-10.903874,911.18573)" style="fill:#49cb00;fill-opacity:1;stroke:none" />
+                        <path d="m 65.423244,46.484936 a 23.816357,41.893829 0 1 1 -47.632713,0 23.816357,41.893829 0 1 1 47.632713,0 z" transform="matrix(0.74813957,-0.6635414,0.6635414,0.74813957,15.502454,1002.7252)" style="fill:#ff0000;fill-opacity:1;stroke:none" />
+                        <text x="163.17155" y="952.1311" transform="matrix(0.98781941,0.59891918,-0.15560465,0.91798701,0,0)" id="text3812" xml:space="preserve" style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:sans-serif">
+                            <tspan x="163.17155" y="952.1311">SVG!</tspan>
+                        </text>
+                    </g>
+                </svg>
+            </div>
+            <script>
+                if(!$("#svg-wrapper svg").length)
+                    $("#svg-wrapper").html("<h1>[Cannot display svg]</h1>");
+            </script>
+        </textarea>
+        <textarea id="4" data-title="static">4</textarea>
+        <textarea id="5" data-title="movement">5</textarea>
+        <textarea id="6" data-title="force">6</textarea>
+        <textarea id="7" data-title="scaling">7</textarea>
+        <textarea id="8" data-title="hover">8</textarea>
+        <textarea id="9" data-title="touch">9</textarea>
+        <textarea id="10" data-title="multi-touch">10</textarea>
+        <textarea id="11" data-title="interaction">11</textarea>
+        <textarea id="12" data-title="lots-of-updates">12</textarea>
+        <textarea id="13" data-title="hardware">13</textarea>
+        <script>
+            //load html for slide and bind next/prev buttons
+            function load_slide(n){
+                $("#title").html($("#"+n).data("title"));
+                $("#slide").html($("#"+n).val());
+                $("#next").unbind("click");
+                $("#next").bind("click", function(e){
+                    e.preventDefault();
+                    if(n < 13)
+                        load_slide(n + 1);
+                    else
+                        load_slide(13);
+                });
+                $("#prev").unbind("click");
+                $("#prev").bind("click", function(e){
+                    e.preventDefault();
+                    if(n > 2)
+                        load_slide(n - 1);
+                    else
+                        load_slide(2);
+                });
+            }
+            load_slide(2);
+
+
+        </script>
+    </body>
+</html>
