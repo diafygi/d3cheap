@@ -15,42 +15,14 @@
         <script src="d3.min.js" charset="utf-8"></script>
         <script src="zepto.min.js" charset="utf-8"></script>
         <style>
-            body{
-                font-family:"sans-serif";
-            }
-            #nextprev{
-                margin:10px 0px 20px 10px;
-            }
-            #next, #prev{
-                display:inline-block;
-                text-decoration:none;
-                font-weight:bold;
-                padding:10px;
-                margin-right:10px;
-                background-color:#0000FF;
-                color:#EEEEEE;
-                border-radius:5px;
-            }
-            #title{
-                display:inline-block;
-                text-overflow:ellipsis;
-                font-style:italic;
-                font-size:20px;
-            }
-            #wrapper{
-                text-align:center;
-            }
-            #slide{
-                text-align:left;
-                display:inline-block;
-            }
-            textarea{
-                display:none;
-            }
-            h1{
-                text-align:center;
-                font-size:30px;
-            }
+            body{font-family:"sans-serif";}
+            #nextprev{margin:10px 0px 20px 10px;}
+            #next, #prev{display:inline-block;text-decoration:none;font-weight:bold;padding:10px;margin-right:10px;background-color:#0000FF;color:#EEEEEE;border-radius:5px;}
+            #title{display:inline-block;text-overflow:ellipsis;font-style:italic;font-size:20px;}
+            #wrapper{text-align:center;}
+            #slide{text-align:left;display:inline-block;}
+            textarea{display:none;}
+            h1{text-align:center;font-size:30px;}
         </style>
     </head>
     <body>
@@ -69,6 +41,8 @@
         <textarea id="2" data-title="intro">
             <h1>d3 on cheap smarphones</h1>
         </textarea>
+
+
         <textarea id="3" data-title="support">
             <div id="svg-wrapper">
                 <!--manual svg made in inkscape-->
@@ -87,41 +61,77 @@
                     $("#svg-wrapper").html("<h1>[Cannot display svg]</h1>");
             </script>
         </textarea>
-        <textarea id="4" data-title="static">4</textarea>
-        <textarea id="5" data-title="movement">5</textarea>
-        <textarea id="6" data-title="force">6</textarea>
-        <textarea id="7" data-title="scaling">7</textarea>
-        <textarea id="8" data-title="hover">8</textarea>
-        <textarea id="9" data-title="touch">9</textarea>
-        <textarea id="10" data-title="multi-touch">10</textarea>
-        <textarea id="11" data-title="interaction">11</textarea>
-        <textarea id="12" data-title="lots-of-updates">12</textarea>
-        <textarea id="13" data-title="hardware">13</textarea>
+
+
+        <textarea id="4" data-title="static">
+            4
+        </textarea>
+
+
+        <textarea id="5" data-title="movement">
+            5
+        </textarea>
+
+
+        <textarea id="6" data-title="force">
+            6
+        </textarea>
+
+
+        <textarea id="7" data-title="scaling">
+            7
+        </textarea>
+
+
+        <textarea id="8" data-title="hover">
+            8
+        </textarea>
+
+
+        <textarea id="9" data-title="touch">
+            9
+        </textarea>
+
+
+        <textarea id="10" data-title="multi-touch">
+            10
+        </textarea>
+
+
+        <textarea id="11" data-title="interaction">
+            11
+        </textarea>
+
+
+        <textarea id="12" data-title="lots-of-updates">
+            12
+        </textarea>
+
+
+        <textarea id="13" data-title="hardware">
+            13
+        </textarea>
+
+
         <script>
-            //load html for slide and bind next/prev buttons
+            //overall slide functionality
             function load_slide(n){
                 $("#title").html($("#"+n).data("title"));
                 $("#slide").html($("#"+n).val());
+
                 $("#next").unbind("click");
                 $("#next").bind("click", function(e){
                     e.preventDefault();
-                    if(n < 13)
-                        load_slide(n + 1);
-                    else
-                        load_slide(13);
+                    load_slide(n < 13 ? n + 1 : 13);
                 });
+
                 $("#prev").unbind("click");
                 $("#prev").bind("click", function(e){
                     e.preventDefault();
-                    if(n > 2)
-                        load_slide(n - 1);
-                    else
-                        load_slide(2);
+                    load_slide(n > 2 ? n - 1 : 2);
                 });
             }
             load_slide(2);
-
-
         </script>
     </body>
 </html>
