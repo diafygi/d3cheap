@@ -3,6 +3,7 @@
     <head>
         <title>d3 on cheap smarphones</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no">
         <style>
             /*http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain)*/
             html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small,
@@ -20,7 +21,7 @@
             #next, #prev{display:inline-block;text-decoration:none;font-weight:bold;padding:10px;margin-right:10px;background-color:#0000FF;color:#EEEEEE;border-radius:5px;}
             #title{display:inline-block;text-overflow:ellipsis;font-style:italic;font-size:20px;}
             #wrapper{text-align:center;}
-            #slide{text-align:left;display:inline-block;}
+            #slide{text-align:left;display:block;}
             textarea{display:none;}
             h1{text-align:center;font-size:30px;}
         </style>
@@ -44,19 +45,35 @@
 
 
         <textarea id="3" data-title="support">
-            <div id="svg-wrapper">
-                <!--manual svg made in inkscape (drawing-inkscape.svg)-->
-                <svg width="114" height="125">
-                    <g transform="translate(0,-927.3622)">
-                        <path d="m 68.292685,46.484936 a 26.685797,26.685797 0 1 1 -53.371594,0 26.685797,26.685797 0 1 1 53.371594,0 z" transform="translate(-10.903874,911.18573)" style="fill:#49cb00;fill-opacity:1;stroke:none" />
-                        <path d="m 65.423244,46.484936 a 23.816357,41.893829 0 1 1 -47.632713,0 23.816357,41.893829 0 1 1 47.632713,0 z" transform="matrix(0.74813957,-0.6635414,0.6635414,0.74813957,15.502454,1002.7252)" style="fill:#ff0000;fill-opacity:1;stroke:none" />
-                        <text x="163.17155" y="952.1311" transform="matrix(0.98781941,0.59891918,-0.15560465,0.91798701,0,0)" id="text3812" xml:space="preserve" style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:sans-serif">
-                            <tspan x="163.17155" y="952.1311">SVG!</tspan>
-                        </text>
-                    </g>
-                </svg>
-            </div>
+            <style>
+                #svg-wrapper{margin-left:auto;margin-right:auto;}
+            </style>
+            <div id="svg-wrapper"></div>
             <script>
+                //create a basic static svg layout
+                var svg = d3.select("#svg-wrapper")
+                    .append("svg")
+                    .attr("width", 300)
+                    .attr("height", 300);
+                svg.append("circle")
+                    .attr("cx", 200)
+                    .attr("cy", 200)
+                    .attr("r", 100)
+                    .style("fill", "#0000FF");
+                svg.append("circle")
+                    .attr("cx", 110)
+                    .attr("cy", 130)
+                    .attr("r", 50)
+                    .style("fill", "#00FF00");
+                svg.append("text")
+                    .text("SVG Works!")
+                    .attr("x", 0)
+                    .attr("y", 120)
+                    .attr("transform", "rotate(-20)")
+                    .style("stroke", "#FF3333")
+                    .style("fill", "#FF3333")
+                    .style("font-size", "40px");
+                //check to see if there is an svg element
                 if(!$("#svg-wrapper svg").length)
                     $("#svg-wrapper").html("<h1>[Cannot display svg]</h1>");
             </script>
@@ -64,22 +81,328 @@
 
 
         <textarea id="4" data-title="static">
-            4
+            <style>
+                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;}
+                #add, #sub{margin:10px;text-decoration:none;font-weight:bold;font-size:35px;padding:10px 30px;margin-right:10px;background-color:#0000FF;color:#EEEEEE;border-radius:5px;}
+                #add{float:right;}
+                #sub{float:left;}
+                #footer{width:100%}
+                #count{padding-top:20px;font-size:35px;font-weight:bold;text-align:center;margin-left:auto;margin-right:auto;}
+            </style>
+            <div id="svg-wrapper" style=""></div>
+            <div id="footer">
+                <a id="sub" href="#">-</a>
+                <a id="add" href="#">+</a>
+                <div id="count">33</div>
+            </div>
+            <script>
+                //add circle to svg positioned in box layout
+                var n = 1;
+                var size = 300;
+                var pad = 0.15;
+                function make_circles(){
+                    $("#svg-wrapper").html("");
+                    //generate circle locations
+                    var data = [];
+                    var dia = (size * (1 - pad)) / n;
+                    var dist = (n == 1) ? 0 : dia + (size * pad / (n - 1));
+                    for(var x = 0; x < n; x++)
+                        for(var y = 0; y < n; y++)
+                            data.push([x * dist + dia * 0.5, y * dist + dia * 0.5]);
+                    //insert circles
+                    var svg = d3.select("#svg-wrapper")
+                        .append("svg")
+                        .attr("width", size)
+                        .attr("height", size);
+                    svg.selectAll("circle")
+                        .data(data).enter().append("circle")
+                        .attr("cx", function(d){return d[0];})
+                        .attr("cy", function(d){return d[1];})
+                        .attr("r", dia * 0.5)
+                        .style("fill", "#FF0000");
+                    $("#count").html(n * n);
+                }
+                //bind add/subtract buttons
+                $("#add").bind("click", function(e){
+                    e.preventDefault();
+                    n += 4;
+                    make_circles();
+                });
+                $("#sub").bind("click", function(e){
+                    e.preventDefault();
+                    n = (n <= 1) ? 1 : n - 4;
+                    make_circles();
+                });
+                make_circles();
+            </script>
         </textarea>
 
 
         <textarea id="5" data-title="movement">
-            5
+            <style>
+                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;}
+                #add, #sub{margin:10px;text-decoration:none;font-weight:bold;font-size:35px;padding:10px 30px;margin-right:10px;background-color:#0000FF;color:#EEEEEE;border-radius:5px;}
+                #add{float:right;}
+                #sub{float:left;}
+                #footer{width:100%}
+                #count{padding-top:20px;font-size:35px;font-weight:bold;text-align:center;margin-left:auto;margin-right:auto;}
+            </style>
+            <div id="svg-wrapper" style=""></div>
+            <div id="footer">
+                <a id="sub" href="#">-</a>
+                <a id="add" href="#">+</a>
+                <div id="count"></div>
+            </div>
+            <script>
+                //add circle to svg positioned in box layout
+                var n = 1;
+                var size = 250;
+                var pad = 0.15;
+                function make_circles(){
+                    $("#svg-wrapper").html("");
+                    //generate circle locations
+                    var data = [];
+                    var dia = (size * (1 - pad)) / n;
+                    var dist = (n == 1) ? 0 : dia + (size * pad / (n - 1));
+                    for(var x = 0; x < n; x++)
+                        for(var y = 0; y < n; y++)
+                            data.push([x * dist + dia * 0.5, y * dist + dia * 0.5]);
+                    //insert circles
+                    var svg = d3.select("#svg-wrapper")
+                        .append("svg")
+                        .attr("width", size + 50)
+                        .attr("height", size + 50);
+                    svg.selectAll("circle")
+                        .data(data).enter().append("circle")
+                        .attr("cx", function(d){return d[0];})
+                        .attr("cy", function(d){return d[1];})
+                        .attr("r", dia * 0.5)
+                        .style("fill", "#FF0000");
+                    //move the group of circles
+                    (function move(cur_len){
+                        svg.selectAll("circle")
+                            .data(data)
+                            .transition().duration(500)
+                                .attr("cx", function(d){return d[0] + 50;})
+                                .attr("cy", function(d){return d[1] + 50;})
+                            .transition().duration(500)
+                                .attr("cx", function(d){return d[0];})
+                                .attr("cy", function(d){return d[1];})
+                                .each("end", function(d, i){
+                                    //only fire recursion on last circle
+                                    if(i == data.length - 1){
+                                        //break the recursion if changed number of circles
+                                        var cir_len = 0;
+                                        svg.selectAll("circle")
+                                            .each(function(){cir_len++;});
+                                        if(cur_len == cir_len)
+                                            move(n * n);
+                                    }
+                                });
+                    })(n * n);
+                    $("#count").html(n * n);
+                }
+                //bind add/subtract buttons
+                $("#add").bind("click", function(e){
+                    e.preventDefault();
+                    n += 4;
+                    make_circles();
+                });
+                $("#sub").bind("click", function(e){
+                    e.preventDefault();
+                    n = (n <= 1) ? 1 : n - 4;
+                    make_circles();
+                });
+                make_circles();
+            </script>
         </textarea>
 
 
         <textarea id="6" data-title="force">
-            6
+            <style>
+                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;}
+                #add, #sub{margin:10px;text-decoration:none;font-weight:bold;font-size:35px;padding:10px 30px;margin-right:10px;background-color:#0000FF;color:#EEEEEE;border-radius:5px;}
+                #add{float:right;}
+                #sub{float:left;}
+                #footer{width:100%}
+                #count{padding-top:20px;font-size:35px;font-weight:bold;text-align:center;margin-left:auto;margin-right:auto;}
+            </style>
+            <div id="svg-wrapper" style=""></div>
+            <div id="footer">
+                <a id="sub" href="#">-</a>
+                <a id="add" href="#">+</a>
+                <div id="count"></div>
+            </div>
+            <script>
+                //add circle to svg positioned in box layout
+                var n = 2;
+                var size = 300;
+                var pad = 0.15;
+                function make_force(){
+                    $("#svg-wrapper").html("");
+                    //generate initial nodes
+                    var nodes = [];
+                    var dia = (size * (1 - pad)) / n;
+                    var dist = (n == 1) ? 0 : dia + (size * pad / (n - 1));
+                    for(var x = 0; x < n; x++){
+                        for(var y = 0; y < n; y++){
+                            nodes.push({
+                                "x": x * dist + dia * 0.5,
+                                "y": y * dist + dia * 0.5,
+                                "weight": Math.random() + 1.0,
+                            });
+                        }
+                    }
+                    //generate random links (via Fisher–Yates shuffle)
+                    var range = [];
+                    for(var i = 0; i < nodes.length; i++)
+                        range.push(i);
+                    var links = [];
+                    var max_links = 8;
+                    for(var i = 0; i < range.length; i++){
+                        var shuf = range.slice(0);
+                        var index;
+                        var tmp;
+                        for(var j = range.length - 1; j >= 0; j--){
+                            index = Math.floor(j * Math.random());
+                            tmp = shuf[index];
+                            shuf[index] = shuf[j];
+                            shuf[j] = tmp;
+                        }
+                        shuf = shuf.slice(0, Math.floor(max_links * Math.random()));
+                        for(var j = 0; j < shuf.length; j++){
+                            links.push({
+                                "source": nodes[i],
+                                "target": nodes[shuf[j]],
+                            });
+                        }
+                    }
+                    //insert force directed layout
+                    var svg = d3.select("#svg-wrapper")
+                        .append("svg")
+                        .attr("width", size)
+                        .attr("height", size);
+                    var force = d3.layout.force()
+                        .nodes(nodes)
+                        .links(links)
+                        .size([size, size])
+                        .linkDistance(60)
+                        .charge(-300)
+                        .on("tick", function(){
+                            link.attr("x1", function(d){return d['source']['x'];})
+                                .attr("y1", function(d){return d['source']['y'];})
+                                .attr("x2", function(d){return d['target']['x'];})
+                                .attr("y2", function(d){return d['target']['y'];});
+                            node.attr("transform", function(d){
+                                return "translate(" + d['x'] + "," + d['y'] + ")";
+                            });
+                        })
+                        .start();
+                    var link = svg.selectAll("line")
+                        .data(force.links())
+                        .enter().append("line")
+                        .style("stroke-width", "2px")
+                        .style("stroke", "#333333");
+                    var node = svg.selectAll("circle")
+                        .data(force.nodes())
+                        .enter().append("circle")
+                        .style("fill", "#FF0000")
+                        .style("stroke", "#FFDDDD")
+                        .style("stroke-width", "2px")
+                        .attr("r", 15);
+                    $("#count").html(n * n);
+                }
+                //bind add/subtract buttons
+                $("#add").bind("click", function(e){
+                    e.preventDefault();
+                    n += 1;
+                    make_force();
+                });
+                $("#sub").bind("click", function(e){
+                    e.preventDefault();
+                    n = (n <= 4) ? 4 : n - 1;
+                    make_force();
+                });
+                make_force();
+            </script>
         </textarea>
 
 
         <textarea id="7" data-title="scaling">
-            7
+            <style>
+                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;}
+                #add, #sub{margin:10px;text-decoration:none;font-weight:bold;font-size:35px;padding:10px 30px;margin-right:10px;background-color:#0000FF;color:#EEEEEE;border-radius:5px;}
+                #add{float:right;}
+                #sub{float:left;}
+                #footer{width:100%}
+                #count{padding-top:20px;font-size:35px;font-weight:bold;text-align:center;margin-left:auto;margin-right:auto;}
+            </style>
+            <div id="svg-wrapper" style=""></div>
+            <div id="footer">
+                <a id="sub" href="#">-</a>
+                <a id="add" href="#">+</a>
+                <div id="count"></div>
+            </div>
+            <script>
+                //add circle to svg positioned in box layout
+                var n = 1;
+                var size = 200;
+                var pad = 0.40;
+                function make_circles(){
+                    $("#svg-wrapper").html("");
+                    //generate circle locations
+                    var data = [];
+                    var dia = (size * (1 - pad)) / n;
+                    var dist = (n == 1) ? 0 : dia + (size * pad / (n - 1));
+                    for(var x = 0; x < n; x++)
+                        for(var y = 0; y < n; y++)
+                            data.push([x * dist + dia * 0.5, y * dist + dia * 0.5]);
+                    //insert circles
+                    var svg = d3.select("#svg-wrapper")
+                        .append("svg")
+                        .attr("width", size + 100)
+                        .attr("height", size + 100);
+                    svg.selectAll("circle")
+                        .data(data).enter().append("circle")
+                        .attr("cx", function(d){return d[0];})
+                        .attr("cy", function(d){return d[1];})
+                        .attr("r", dia * 0.5)
+                        .style("fill", "#FF0000");
+                    //scale the group of circles
+                    (function move(cur_len){
+                        svg.selectAll("circle")
+                            .data(data)
+                            .transition().duration(500)
+                                .attr("transform", "scale(1.5)")
+                            .transition().duration(500)
+                                .attr("transform", "scale(1.0)")
+                                .each("end", function(d, i){
+                                    //only fire recursion on last circle
+                                    if(i == data.length - 1){
+                                        //break the recursion if changed number of circles
+                                        var cir_len = 0;
+                                        svg.selectAll("circle")
+                                            .each(function(){cir_len++;});
+                                        if(cur_len == cir_len)
+                                            move(n * n);
+                                    }
+                                });
+                    })(n * n);
+                    $("#count").html(n * n);
+                }
+                //bind add/subtract buttons
+                $("#add").bind("click", function(e){
+                    e.preventDefault();
+                    n += 4;
+                    make_circles();
+                });
+                $("#sub").bind("click", function(e){
+                    e.preventDefault();
+                    n = (n <= 1) ? 1 : n - 4;
+                    make_circles();
+                });
+                make_circles();
+            </script>
         </textarea>
 
 
