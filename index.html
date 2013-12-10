@@ -407,12 +407,54 @@
 
 
         <textarea id="8" data-title="hover">
-            8
+            <style>
+                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;border:1px solid #000000;}
+            </style>
+            <div id="svg-wrapper" style=""></div>
+            <script>
+                //insert circle, move with mouse
+                var svg = d3.select("#svg-wrapper")
+                    .append("svg")
+                    .attr("width", 300)
+                    .attr("height", 300)
+                    .on("mousemove", function(){
+                        var coords = d3.mouse(this);
+                        circle
+                            .attr("cx", coords[0])
+                            .attr("cy", coords[1]);
+                    });
+                var circle = svg.append("circle")
+                    .attr("cx", 150)
+                    .attr("cy", 150)
+                    .attr("r", 40)
+                    .style("fill", "#FF0000");
+            </script>
         </textarea>
 
 
         <textarea id="9" data-title="touch">
-            9
+            <style>
+                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;border:1px solid #000000;}
+            </style>
+            <div id="svg-wrapper" style=""></div>
+            <script>
+                //insert circle, move with touch
+                var svg = d3.select("#svg-wrapper")
+                    .append("svg")
+                    .attr("width", 300)
+                    .attr("height", 300)
+                    .on("touchmove", function(){
+                        var coords = d3.touches(this);
+                        circle
+                            .attr("cx", coords[0])
+                            .attr("cy", coords[1]);
+                    });
+                var circle = svg.append("circle")
+                    .attr("cx", 150)
+                    .attr("cy", 150)
+                    .attr("r", 40)
+                    .style("fill", "#FF0000");
+            </script>
         </textarea>
 
 
