@@ -89,7 +89,7 @@
                 #footer{width:100%}
                 #count{padding-top:20px;font-size:35px;font-weight:bold;text-align:center;margin-left:auto;margin-right:auto;}
             </style>
-            <div id="svg-wrapper" style=""></div>
+            <div id="svg-wrapper"></div>
             <div id="footer">
                 <a id="sub" href="#">-</a>
                 <a id="add" href="#">+</a>
@@ -147,7 +147,7 @@
                 #footer{width:100%}
                 #count{padding-top:20px;font-size:35px;font-weight:bold;text-align:center;margin-left:auto;margin-right:auto;}
             </style>
-            <div id="svg-wrapper" style=""></div>
+            <div id="svg-wrapper"></div>
             <div id="footer">
                 <a id="sub" href="#">-</a>
                 <a id="add" href="#">+</a>
@@ -227,7 +227,7 @@
                 #footer{width:100%}
                 #count{padding-top:20px;font-size:35px;font-weight:bold;text-align:center;margin-left:auto;margin-right:auto;}
             </style>
-            <div id="svg-wrapper" style=""></div>
+            <div id="svg-wrapper"></div>
             <div id="footer">
                 <a id="sub" href="#">-</a>
                 <a id="add" href="#">+</a>
@@ -337,7 +337,7 @@
                 #footer{width:100%}
                 #count{padding-top:20px;font-size:35px;font-weight:bold;text-align:center;margin-left:auto;margin-right:auto;}
             </style>
-            <div id="svg-wrapper" style=""></div>
+            <div id="svg-wrapper"></div>
             <div id="footer">
                 <a id="sub" href="#">-</a>
                 <a id="add" href="#">+</a>
@@ -410,7 +410,7 @@
             <style>
                 #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;border:1px solid #000000;}
             </style>
-            <div id="svg-wrapper" style=""></div>
+            <div id="svg-wrapper"></div>
             <script>
                 //insert circle, move with mouse
                 var svg = d3.select("#svg-wrapper")
@@ -436,7 +436,7 @@
             <style>
                 #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;border:1px solid #000000;}
             </style>
-            <div id="svg-wrapper" style=""></div>
+            <div id="svg-wrapper"></div>
             <script>
                 //insert circle, move with touch
                 var svg = d3.select("#svg-wrapper")
@@ -446,8 +446,8 @@
                     .on("touchmove", function(){
                         var coords = d3.touches(this);
                         circle
-                            .attr("cx", coords[0])
-                            .attr("cy", coords[1]);
+                            .attr("cx", coords[0][0])
+                            .attr("cy", coords[0][1]);
                     });
                 var circle = svg.append("circle")
                     .attr("cx", 150)
@@ -459,7 +459,32 @@
 
 
         <textarea id="10" data-title="multi-touch">
-            10
+            <style>
+                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;border:1px solid #000000;}
+            </style>
+            <div id="svg-wrapper"></div>
+            <script>
+                var i = 0;
+                function update(coords){
+                    var circles = svg.selectAll("circle")
+                        .data(coords);
+                    console.log(coords);
+                    circles.exit().remove();
+                    circles.enter().append("circle")
+                        .attr("cx", function(d){console.log("hello");return d[0];})
+                        .attr("cy", function(d){return d[1];})
+                        .attr("r", 40)
+                        .style("fill", "#FF0000");
+                }
+                var svg = d3.select("#svg-wrapper")
+                    .append("svg")
+                    .attr("width", 300)
+                    .attr("height", 300)
+                    .on("touchmove", function(){
+                        update(d3.touches(this));
+                    });
+                update([[150, 150], [100, 100]]);
+            </script>
         </textarea>
 
 

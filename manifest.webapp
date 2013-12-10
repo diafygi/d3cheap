@@ -1,0 +1,11 @@
+{ 
+  "name": "Where am I?", 
+  "description": "This app tells you where you're located.",
+  "version": "1.0",
+  "launch_path": "/index.html", 
+  "developer": 
+  { 
+    "name": "Jeff Friesen", 
+    "url": "http://tutortutor.ca" 
+  }
+}
