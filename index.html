@@ -14,10 +14,9 @@
             blockquote, q {quotes: none;} blockquote:before, blockquote:after, q:before, q:after {content:''; content:none;} table {border-collapse:collapse; border-spacing:0;}
         </style>
         <script src="d3.min.js" charset="utf-8"></script>
-        <script src="zepto.min.js" charset="utf-8"></script>
         <style>
             body{font-family:"sans-serif";}
-            #nextprev{margin:10px 0px 20px 10px;}
+            #nextprev{margin:5px 0px 5px 10px;}
             #next, #prev{display:inline-block;text-decoration:none;font-weight:bold;padding:10px;margin-right:10px;background-color:#0000FF;color:#EEEEEE;border-radius:5px;}
             #title{display:inline-block;text-overflow:ellipsis;font-style:italic;font-size:20px;}
             #wrapper{text-align:center;}
@@ -39,12 +38,12 @@
         <!--(I want to show real load times when tapping next)-->
         <!--Also, my syntax highlight still works within textareas-->
         <!--(makes coding easier than typing html into javascript variables)-->
-        <textarea id="2" data-title="intro">
+        <textarea id="2" title="intro">
             <h1>d3 on cheap smarphones</h1>
         </textarea>
 
 
-        <textarea id="3" data-title="support">
+        <textarea id="3" title="support">
             <style>
                 #svg-wrapper{margin-left:auto;margin-right:auto;}
             </style>
@@ -74,15 +73,15 @@
                     .style("fill", "#FF3333")
                     .style("font-size", "40px");
                 //check to see if there is an svg element
-                if(!$("#svg-wrapper svg").length)
-                    $("#svg-wrapper").html("<h1>[Cannot display svg]</h1>");
+                if(d3.select("#svg-wrapper svg").empty())
+                    document.getElementById("svg-wrapper").innerHTML = "<h1>[Cannot display svg]</h1>";
             </script>
         </textarea>
 
 
-        <textarea id="4" data-title="static">
+        <textarea id="4" title="static">
             <style>
-                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;}
+                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;border:1px solid #000000;}
                 #add, #sub{margin:10px;text-decoration:none;font-weight:bold;font-size:35px;padding:10px 30px;margin-right:10px;background-color:#0000FF;color:#EEEEEE;border-radius:5px;}
                 #add{float:right;}
                 #sub{float:left;}
@@ -101,7 +100,7 @@
                 var size = 300;
                 var pad = 0.15;
                 function make_circles(){
-                    $("#svg-wrapper").html("");
+                    document.getElementById("svg-wrapper").innerHTML = "";
                     //generate circle locations
                     var data = [];
                     var dia = (size * (1 - pad)) / n;
@@ -120,16 +119,16 @@
                         .attr("cy", function(d){return d[1];})
                         .attr("r", dia * 0.5)
                         .style("fill", "#FF0000");
-                    $("#count").html(n * n);
+                    document.getElementById("count").innerHTML = n * n;
                 }
                 //bind add/subtract buttons
-                $("#add").bind("click", function(e){
-                    e.preventDefault();
+                d3.select("#add").on("click", function(){
+                    d3.event.preventDefault();
                     n += 4;
                     make_circles();
                 });
-                $("#sub").bind("click", function(e){
-                    e.preventDefault();
+                d3.select("#sub").on("click", function(){
+                    d3.event.preventDefault();
                     n = (n <= 1) ? 1 : n - 4;
                     make_circles();
                 });
@@ -138,9 +137,9 @@
         </textarea>
 
 
-        <textarea id="5" data-title="movement">
+        <textarea id="5" title="movement">
             <style>
-                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;}
+                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;border:1px solid #000000;}
                 #add, #sub{margin:10px;text-decoration:none;font-weight:bold;font-size:35px;padding:10px 30px;margin-right:10px;background-color:#0000FF;color:#EEEEEE;border-radius:5px;}
                 #add{float:right;}
                 #sub{float:left;}
@@ -159,7 +158,7 @@
                 var size = 250;
                 var pad = 0.15;
                 function make_circles(){
-                    $("#svg-wrapper").html("");
+                    document.getElementById("svg-wrapper").innerHTML = "";
                     //generate circle locations
                     var data = [];
                     var dia = (size * (1 - pad)) / n;
@@ -200,17 +199,17 @@
                                     }
                                 });
                     })(n * n);
-                    $("#count").html(n * n);
+                    document.getElementById("count").innerHTML = n * n;
                 }
                 //bind add/subtract buttons
-                $("#add").bind("click", function(e){
-                    e.preventDefault();
-                    n += 4;
+                d3.select("#add").on("click", function(){
+                    d3.event.preventDefault();
+                    n += 2;
                     make_circles();
                 });
-                $("#sub").bind("click", function(e){
-                    e.preventDefault();
-                    n = (n <= 1) ? 1 : n - 4;
+                d3.select("#sub").on("click", function(){
+                    d3.event.preventDefault();
+                    n = (n <= 1) ? 1 : n - 2;
                     make_circles();
                 });
                 make_circles();
@@ -218,9 +217,9 @@
         </textarea>
 
 
-        <textarea id="6" data-title="force">
+        <textarea id="6" title="force">
             <style>
-                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;}
+                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;border:1px solid #000000;}
                 #add, #sub{margin:10px;text-decoration:none;font-weight:bold;font-size:35px;padding:10px 30px;margin-right:10px;background-color:#0000FF;color:#EEEEEE;border-radius:5px;}
                 #add{float:right;}
                 #sub{float:left;}
@@ -239,7 +238,7 @@
                 var size = 300;
                 var pad = 0.15;
                 function make_force(){
-                    $("#svg-wrapper").html("");
+                    document.getElementById("svg-wrapper").innerHTML = "";
                     //generate initial nodes
                     var nodes = [];
                     var dia = (size * (1 - pad)) / n;
@@ -258,7 +257,7 @@
                     for(var i = 0; i < nodes.length; i++)
                         range.push(i);
                     var links = [];
-                    var max_links = 8;
+                    var max_links = 6;
                     for(var i = 0; i < range.length; i++){
                         var shuf = range.slice(0);
                         var index;
@@ -310,17 +309,17 @@
                         .style("stroke", "#FFDDDD")
                         .style("stroke-width", "2px")
                         .attr("r", 15);
-                    $("#count").html(n * n);
+                    document.getElementById("count").innerHTML = n * n;
                 }
                 //bind add/subtract buttons
-                $("#add").bind("click", function(e){
-                    e.preventDefault();
+                d3.select("#add").on("click", function(){
+                    d3.event.preventDefault();
                     n += 1;
                     make_force();
                 });
-                $("#sub").bind("click", function(e){
-                    e.preventDefault();
-                    n = (n <= 4) ? 4 : n - 1;
+                d3.select("#sub").on("click", function(){
+                    d3.event.preventDefault();
+                    n = (n <= 2) ? 2 : n - 1;
                     make_force();
                 });
                 make_force();
@@ -328,9 +327,9 @@
         </textarea>
 
 
-        <textarea id="7" data-title="scaling">
+        <textarea id="7" title="scaling">
             <style>
-                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;}
+                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;border:1px solid #000000;}
                 #add, #sub{margin:10px;text-decoration:none;font-weight:bold;font-size:35px;padding:10px 30px;margin-right:10px;background-color:#0000FF;color:#EEEEEE;border-radius:5px;}
                 #add{float:right;}
                 #sub{float:left;}
@@ -349,7 +348,7 @@
                 var size = 200;
                 var pad = 0.40;
                 function make_circles(){
-                    $("#svg-wrapper").html("");
+                    document.getElementById("svg-wrapper").innerHTML = "";
                     //generate circle locations
                     var data = [];
                     var dia = (size * (1 - pad)) / n;
@@ -388,17 +387,17 @@
                                     }
                                 });
                     })(n * n);
-                    $("#count").html(n * n);
+                    document.getElementById("count").innerHTML = n * n;
                 }
                 //bind add/subtract buttons
-                $("#add").bind("click", function(e){
-                    e.preventDefault();
-                    n += 4;
+                d3.select("#add").on("click", function(){
+                    d3.event.preventDefault();
+                    n += 2;
                     make_circles();
                 });
-                $("#sub").bind("click", function(e){
-                    e.preventDefault();
-                    n = (n <= 1) ? 1 : n - 4;
+                d3.select("#sub").on("click", function(){
+                    d3.event.preventDefault();
+                    n = (n <= 1) ? 1 : n - 2;
                     make_circles();
                 });
                 make_circles();
@@ -406,7 +405,7 @@
         </textarea>
 
 
-        <textarea id="8" data-title="hover">
+        <textarea id="8" title="hover">
             <style>
                 #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;border:1px solid #000000;}
             </style>
@@ -432,7 +431,7 @@
         </textarea>
 
 
-        <textarea id="9" data-title="touch">
+        <textarea id="9" title="touch">
             <style>
                 #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;border:1px solid #000000;}
             </style>
@@ -447,7 +446,7 @@
                         var coords = d3.touches(this);
                         circle
                             .attr("cx", coords[0][0])
-                            .attr("cy", coords[0][1]);
+                            .attr("cy", coords[0][1] - 40); //so people can see the dot with my finger in the way
                     });
                 var circle = svg.append("circle")
                     .attr("cx", 150)
@@ -458,21 +457,24 @@
         </textarea>
 
 
-        <textarea id="10" data-title="multi-touch">
+        <textarea id="10" title="multi-touch">
             <style>
                 #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;border:1px solid #000000;}
             </style>
             <div id="svg-wrapper"></div>
             <script>
-                var i = 0;
                 function update(coords){
-                    svg.selectAll("circle").remove();
-                    svg.selectAll("circle")
-                        .data(coords).enter().append("circle")
-                        .attr("cx", function(d){return d[0];})
-                        .attr("cy", function(d){return d[1];})
+                    var data = [[40,40], [113,40], [187,40], [260,40]]; //default coords
+                    for(var i = 0; i < coords.length; i++)
+                        data[i] = coords[i];
+                    var circles = svg.selectAll("circle")
+                        .data(data);
+                    circles.enter().append("circle")
                         .attr("r", 40)
                         .style("fill", "#FF0000");
+                    circles
+                        .attr("cx", function(d){return d[0];})
+                        .attr("cy", function(d){return d[1] - 40;}); //so people can see the dot with my finger in the way
                 }
                 var svg = d3.select("#svg-wrapper")
                     .append("svg")
@@ -481,42 +483,90 @@
                     .on("touchmove", function(){
                         update(d3.touches(this));
                     });
-                update([[150, 150]]);
+                update([]);
             </script>
         </textarea>
 
 
-        <textarea id="11" data-title="interaction">
-            11
+        <textarea id="11" title="interaction">
+            <style>
+                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;border:1px solid #000000;}
+            </style>
+            <div id="svg-wrapper"></div>
+            <script>
+                var corners = [[200,100], [100,200]]; //default corners
+                function update(){
+                    var data = [
+                        [corners[0][0], corners[1][1]],
+                        corners[0],
+                        [corners[1][0], corners[0][1]],
+                        corners[1]
+                    ];
+                    //draw lines for box
+                    var lines = svg.selectAll("line")
+                        .data(data);
+                    lines.enter().append("line")
+                        .style("stroke-width", "4px")
+                        .style("stroke", "#333333");
+                    lines
+                        .attr("x1", function(d, i){return data[i][0];})
+                        .attr("y1", function(d, i){return data[i][1];})
+                        .attr("x2", function(d, i){return data[(i+1)%4][0];})
+                        .attr("y2", function(d, i){return data[(i+1)%4][1];});
+                    //draw corner circles for box
+                    var circles = svg.selectAll("circle")
+                        .data(data);
+                    circles.enter().append("circle")
+                        .style("fill", "#FF0000")
+                        .style("stroke", "#FFDDDD")
+                        .style("stroke-width", "4px");
+                    circles
+                        .attr("cx", function(d){return d[0];})
+                        .attr("cy", function(d){return d[1];})
+                        .attr("r", function(d, i){return (i%2) ? 30 : 10;});
+                }
+                var svg = d3.select("#svg-wrapper")
+                    .append("svg")
+                    .attr("width", 300)
+                    .attr("height", 300)
+                    .on("touchmove", function(){
+                        var coords = d3.touches(this);
+                        for(var i = 0; i < coords.length; i++)
+                            corners[i] = coords[i];
+                        update();
+                    });
+                update();
+            </script>
         </textarea>
 
 
-        <textarea id="12" data-title="lots-of-updates">
+        <textarea id="12" title="lots-of-updates">
             12
         </textarea>
 
 
-        <textarea id="13" data-title="hardware">
+        <textarea id="13" title="hardware">
             13
         </textarea>
 
 
         <script>
             //overall slide functionality
-            function load_slide(n){
-                $("#title").html($("#"+n).data("title"));
-                $("#slide").html($("#"+n).val());
+            function load_slide(slide_num){
+                document.getElementById("title").innerHTML = document.getElementById(slide_num).getAttribute("title");
+                document.getElementById("slide").innerHTML = document.getElementById(slide_num).value;
+                var scripts_filter = document.getElementById("slide").getElementsByTagName("script");
+                for(var scripts_index = 0; scripts_index < scripts_filter.length; scripts_index++)
+                    eval(scripts_filter[scripts_index].innerHTML);
 
-                $("#next").unbind("click");
-                $("#next").bind("click", function(e){
-                    e.preventDefault();
-                    load_slide(n < 13 ? n + 1 : 13);
+                d3.select("#next").on("click", function(){
+                    d3.event.preventDefault();
+                    load_slide(slide_num < 13 ? slide_num + 1 : 13);
                 });
 
-                $("#prev").unbind("click");
-                $("#prev").bind("click", function(e){
-                    e.preventDefault();
-                    load_slide(n > 2 ? n - 1 : 2);
+                d3.select("#prev").on("click", function(){
+                    d3.event.preventDefault();
+                    load_slide(slide_num > 2 ? slide_num - 1 : 2);
                 });
             }
             load_slide(2);
