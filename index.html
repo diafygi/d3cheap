@@ -541,12 +541,115 @@
 
 
         <textarea id="12" title="lots-of-updates">
-            12
+            <style>
+                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;border:1px solid #000000;}
+                #add, #sub{margin:10px;text-decoration:none;font-weight:bold;font-size:35px;padding:10px 30px;margin-right:10px;background-color:#0000FF;color:#EEEEEE;border-radius:5px;}
+                #add{float:right;}
+                #sub{float:left;}
+                #footer{width:100%}
+                #count{padding-top:20px;font-size:35px;font-weight:bold;text-align:center;margin-left:auto;margin-right:auto;}
+            </style>
+            <div id="svg-wrapper"></div>
+            <div id="footer">
+                <a id="sub" href="#">-</a>
+                <a id="add" href="#">+</a>
+                <div id="count"></div>
+            </div>
+            <script>
+                var size = 300;
+                var n = 4;
+                //move circles in cascade
+                function move_circle(c, i, pos){
+                    if(c != n || i < 0)
+                        return;
+                    setTimeout(function(){
+                        d3.select("#c" + c + "-" + i)
+                            .transition().duration(100)
+                            .attr("cx", pos);
+                        move_circle(c, i - 1, pos);
+                    }, 20);
+                }
+                function make_circles(){
+                    document.getElementById("svg-wrapper").innerHTML = "";
+                    //calculate spacing
+                    var data = [];
+                    for(var j = 0; j < n; j++)
+                        data.push((size - 40) / n * j + 20);
+                    //generate pile of circles
+                    var svg = d3.select("#svg-wrapper")
+                        .append("svg")
+                        .attr("width", size)
+                        .attr("height", size);
+                    svg.append("line")
+                        .attr("x1", 40)
+                        .attr("y1", data[data.length - 1])
+                        .attr("x2", size - 40)
+                        .attr("y2", data[data.length - 1])
+                        .style("stroke-width", "2px")
+                        .style("stroke", "#333333");
+                    svg.selectAll("circle")
+                        .data(data).enter().append("circle")
+                        .attr("id", function(d, i){return "c" + n + "-" + i;})
+                        .attr("cx", 150)
+                        .attr("cy", function(d){return d;})
+                        .attr("r", function(d, i){return (20 / n * i) + 20;})
+                        .style("fill", "#FF0000")
+                        .style("stroke", "#FFDDDD")
+                        .style("stroke-width", "4px");
+                    d3.select("#c" + n + "-" + (data.length - 1))
+                        .on("touchmove", function(){
+                            var xy = d3.touches(this)[0];
+                            var x = Math.min(Math.max(xy[0], 40), 260);
+                            d3.select("#c" + n + "-" + (data.length - 1))
+                                .attr("cx", x);
+                            move_circle(n, data.length - 2, x);
+                        });
+                    document.getElementById("count").innerHTML = n;
+                }
+                //add/subtract circles
+                d3.select("#add").on("click", function(){
+                    d3.event.preventDefault();
+                    n += 4;
+                    make_circles();
+                });
+                d3.select("#sub").on("click", function(){
+                    d3.event.preventDefault();
+                    n = (n <= 4) ? 4 : n - 4;
+                    make_circles();
+                });
+                make_circles();
+            </script>
         </textarea>
 
 
         <textarea id="13" title="hardware">
-            13
+            <style>
+                #svg-wrapper{width:300px;height:300px;margin-left:auto;margin-right:auto;border:1px solid #000000;}
+            </style>
+            <div id="svg-wrapper"></div>
+            <div id="tilt"></div>
+            <script>
+                var svg = d3.select("#svg-wrapper")
+                    .append("svg")
+                    .attr("width", 300)
+                    .attr("height", 300);
+                svg.append("circle")
+                    .attr("cx", 150)
+                    .attr("cy", 150)
+                    .attr("r", 150)
+                    .style("fill", "#777777");
+                var dot = svg.append("circle")
+                    .attr("cx", 150)
+                    .attr("cy", 150)
+                    .attr("r", 40)
+                    .style("fill", "#FF0000");
+                console.log(window.screen.mozLockOrientation("portrait-primary"));
+                window.ondeviceorientation = function (event) {
+                    dot.attr("cx", function(){return 150 + event.gamma * 1.5;})
+                       .attr("cy", function(){return 150 + event.beta * 1.5;});
+                    document.getElementById("tilt").innerHTML = "Beta:" + event.beta + "<br>" + "Gamma:" + event.gamma;
+                };
+            </script>
         </textarea>
 
 
