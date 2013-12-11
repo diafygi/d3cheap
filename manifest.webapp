@@ -1,11 +1,12 @@
-{ 
-  "name": "Where am I?", 
-  "description": "This app tells you where you're located.",
+{
+  "name": "d3 on cheap smartphones",
+  "description": "This app is a demo for a presentation at the d3 meetup on 2013-12-12.",
   "version": "1.0",
-  "launch_path": "/index.html", 
-  "developer": 
-  { 
-    "name": "Jeff Friesen", 
-    "url": "http://tutortutor.ca" 
+  "launch_path": "/index.html",
+  "orientation": "portrait-primary",
+  "developer":
+  {
+    "name": "Daniel Roesler",
+    "url": "https://github.com/diafygi/d3cheap"
   }
 }
