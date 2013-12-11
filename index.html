@@ -643,12 +643,13 @@
                     .attr("cy", 150)
                     .attr("r", 40)
                     .style("fill", "#FF0000");
-                console.log(window.screen.mozLockOrientation("portrait-primary"));
-                window.ondeviceorientation = function (event) {
-                    dot.attr("cx", function(){return 150 + event.gamma * 1.5;})
-                       .attr("cy", function(){return 150 + event.beta * 1.5;});
-                    document.getElementById("tilt").innerHTML = "Beta:" + event.beta + "<br>" + "Gamma:" + event.gamma;
-                };
+                if(window.screen && window.screen.mozLockOrientation && window.screen.mozLockOrientation("portrait-primary")){
+                    window.ondeviceorientation = function (event) {
+                        dot.attr("cx", function(){return 150 + event.gamma * 1.5;})
+                           .attr("cy", function(){return 150 + event.beta * 1.5;});
+                        document.getElementById("tilt").innerHTML = "Beta:" + event.beta + "<br>" + "Gamma:" + event.gamma;
+                    };
+                }
             </script>
         </textarea>
 
